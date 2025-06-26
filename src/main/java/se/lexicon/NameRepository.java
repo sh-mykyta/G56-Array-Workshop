@@ -1,5 +1,8 @@
 package se.lexicon;
 
+import java.sql.Array;
+import java.util.Arrays;
+
 /**
  * The NameRepository class provides methods to manage a list of names.
  * It offers functionalities such as adding, removing, finding, and updating names.
@@ -16,7 +19,7 @@ public class NameRepository {
      */
     public static int getSize() {
         //todo: implement getSize method
-        return 0;
+        return names.length;
     }
 
 
@@ -25,8 +28,9 @@ public class NameRepository {
      *
      * @param names The array of names to set.
      */
-    public static void setNames(String[] names) {
+    public static void setNames(String[] newNames) {
         //todo: implement setNames method
+        names = newNames;
     }
 
 
@@ -35,6 +39,7 @@ public class NameRepository {
      */
     public static void clear() {
         //todo: implement clear method
+        names = new String[0];
     }
 
 
@@ -45,7 +50,9 @@ public class NameRepository {
      */
     public static String[] findAll() {
         //todo: implement findAll method
-        return null;
+        String[] newArray = new String[names.length];
+        System.arraycopy(names, 0, newArray, 0, names.length);
+        return newArray;
     }
 
 
@@ -57,7 +64,18 @@ public class NameRepository {
      */
     public static String find(String fullName) {
         //todo: implement find method
-        return null;
+        //return null;
+        String[] newArray = Arrays.copyOf(names, names.length);
+        Arrays.sort(newArray, String.CASE_INSENSITIVE_ORDER);
+        int indexFound = Arrays.binarySearch(newArray, fullName);
+
+        if(indexFound < 0){
+            System.out.println("There is no such person here: " + fullName);
+            return null;
+        }else{
+            System.out.println("A person was found");
+            return fullName;
+        }
     }
 
 
@@ -69,7 +87,17 @@ public class NameRepository {
      */
     public static boolean add(String fullName) {
         //todo: implement add method
-        return false;
+        String findingResult = find(fullName);
+        if(findingResult != null){
+            System.out.println("This name already exists");
+            return false;
+        }else{
+            String[] newArray = new String[names.length + 1];
+            System.arraycopy(names, 0, newArray, 0, names.length);
+            newArray[newArray.length -1] = fullName;
+            names = newArray;
+            return true;
+        }
     }
 
 
